@@ -130,21 +130,13 @@ public class FoodTruckController {
     }
 
     private FoodTruck doesTruckExist(Long truckID) {
-        Optional<FoodTruck> foodTruck = foodTruckRepo.findById(truckID);
-        if (!foodTruck.isPresent()) {
-            throw new FoodTruckNotFoundException("No food truck belongs to that ID: " + truckID);
-        }
-
-        return foodTruck.get();
+        return foodTruckRepo.findById(truckID).
+                orElseThrow(() -> new FoodTruckNotFoundException("No food truck belongs to that ID: " + truckID));
     }
 
     private FoodItem doesItemExist(Long itemID) {
-        Optional<FoodItem> foodItem = foodItemRepo.findById(itemID);
-        if (!foodItem.isPresent()) {
-            throw new FoodItemNotFoundException("No food item belongs to that ID: " + itemID);
-        }
-
-        return foodItem.get();
+        return foodItemRepo.findById(itemID).
+                orElseThrow(() -> new FoodItemNotFoundException("No food item belongs to that ID: " + itemID));
     }
 
     private final FoodTruckRepo foodTruckRepo;
