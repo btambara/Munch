@@ -14,6 +14,9 @@ public class FoodTruck {
 
     private String name;
 
+    @Enumerated(EnumType.ORDINAL)
+    private FoodTruckType truckType;
+
     @OneToMany(mappedBy = "foodTruck", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<FoodItem> foodItems;
@@ -32,6 +35,14 @@ public class FoodTruck {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public FoodTruckType getTruckType() {
+        return truckType;
+    }
+
+    public void setTruckType(FoodTruckType truckType) {
+        this.truckType = truckType;
     }
 
     public List<FoodItem> getFoodItems() {
