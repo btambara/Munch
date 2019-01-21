@@ -16,6 +16,8 @@ public class FoodTruck {
 
     @Enumerated(EnumType.ORDINAL)
     private FoodTruckType truckType;
+    private double latitude;
+    private double longitude;
 
     @OneToMany(mappedBy = "foodTruck", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
@@ -43,6 +45,22 @@ public class FoodTruck {
 
     public void setTruckType(FoodTruckType truckType) {
         this.truckType = truckType;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public List<FoodItem> getFoodItems() {
