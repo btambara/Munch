@@ -14,7 +14,7 @@ public class FoodTruck {
 
     private String name;
 
-    @OneToMany(mappedBy = "foodTruck", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "foodTruck", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<FoodItem> foodItems;
 
