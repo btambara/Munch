@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/foodtrucks")
@@ -22,6 +24,29 @@ public class FoodTruckController {
     public FoodTruckController(FoodTruckRepo foodTruckRepo, FoodItemRepo foodItemRepo) {
         this.foodTruckRepo = foodTruckRepo;
         this.foodItemRepo = foodItemRepo;
+    }
+
+    @GetMapping
+    public List<FoodTruck> getFoodTrucks(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam Double maxDistance) {
+        Stream<FoodTruck> nearByTrucksStream = foodTruckRepo.findAll().stream().
+                filter(t -> getDistance(latitude, longitude, t.getLatitude(), t.getLongitude()) <= maxDistance);
+
+        ArrayList<FoodTruck> nearByTrucksList = new ArrayList<>();
+        nearByTrucksStream.iterator().forEachRemaining(nearByTrucksList::add);
+        return nearByTrucksList;
+    }
+
+    private static final double R = 6372.8; //KM
+
+    private static double getDistance(double lat1, double lon1, double lat2, double lon2) {
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        lat1 = Math.toRadians(lat1);
+        lat2 = Math.toRadians(lat2);
+
+        double a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        return R * c;
     }
 
     @GetMapping("/{truckID}")
