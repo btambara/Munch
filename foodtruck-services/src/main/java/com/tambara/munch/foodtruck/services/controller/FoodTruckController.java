@@ -26,6 +26,19 @@ public class FoodTruckController {
         this.foodItemRepo = foodItemRepo;
     }
 
+    @GetMapping("/search")
+    public List<FoodTruck> getFoodTrucksBySearch(@RequestParam String lookup) {
+        Stream<FoodTruck> trucksBySearchStream = foodTruckRepo.findAll().stream().
+                filter(t ->
+                        t.getName().contains(lookup) ||
+                                t.getFoodItems().stream().anyMatch(f -> f.getName().contains(lookup))
+                );
+
+        ArrayList<FoodTruck> trucksBySearch = new ArrayList<>();
+        trucksBySearchStream.iterator().forEachRemaining(trucksBySearch::add);
+        return trucksBySearch;
+    }
+
     @GetMapping
     public List<FoodTruck> getAllOpenNearByFoodTrucks(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam Double distance, @RequestParam Double time) {
         Stream<FoodTruck> nearByOpenTrucksStream = foodTruckRepo.findAll().stream().
@@ -36,7 +49,6 @@ public class FoodTruckController {
         nearByOpenTrucksStream.iterator().forEachRemaining(nearByOpenTrucksList::add);
         return nearByOpenTrucksList;
     }
-
 
     private static final double R = 6372.8; //KM
 
@@ -82,7 +94,6 @@ public class FoodTruckController {
                 foodItem.setFoodTruck(foodTruckDomain);
             }
         }
-
 
         FoodTruck newFoodTruckDomain = foodTruckRepo.save(foodTruckDomain);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{truckID}").buildAndExpand(newFoodTruckDomain.getTruckID()).toUri();
