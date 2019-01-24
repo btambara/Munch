@@ -11,6 +11,8 @@ import java.util.List;
 public class FoodTruckModel {
     private String name;
     private FoodTruckType truckType;
+    private long timeOpen;
+    private long timeClosed;
     private double latitude;
     private double longitude;
     private List<FoodItem> foodItems;

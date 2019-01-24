@@ -27,14 +27,16 @@ public class FoodTruckController {
     }
 
     @GetMapping
-    public List<FoodTruck> getFoodTrucks(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam Double maxDistance) {
-        Stream<FoodTruck> nearByTrucksStream = foodTruckRepo.findAll().stream().
-                filter(t -> getDistance(latitude, longitude, t.getLatitude(), t.getLongitude()) <= maxDistance);
+    public List<FoodTruck> getAllOpenNearByFoodTrucks(@RequestParam Double latitude, @RequestParam Double longitude, @RequestParam Double distance, @RequestParam Double time) {
+        Stream<FoodTruck> nearByOpenTrucksStream = foodTruckRepo.findAll().stream().
+                filter(t -> getDistance(latitude, longitude, t.getLatitude(), t.getLongitude()) <= distance).
+                filter(t -> t.getTimeOpen() <= time && t.getTimeClosed() >= time);
 
-        ArrayList<FoodTruck> nearByTrucksList = new ArrayList<>();
-        nearByTrucksStream.iterator().forEachRemaining(nearByTrucksList::add);
-        return nearByTrucksList;
+        ArrayList<FoodTruck> nearByOpenTrucksList = new ArrayList<>();
+        nearByOpenTrucksStream.iterator().forEachRemaining(nearByOpenTrucksList::add);
+        return nearByOpenTrucksList;
     }
+
 
     private static final double R = 6372.8; //KM
 

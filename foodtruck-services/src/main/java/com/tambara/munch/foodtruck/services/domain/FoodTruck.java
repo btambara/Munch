@@ -16,6 +16,8 @@ public class FoodTruck {
 
     @Enumerated(EnumType.ORDINAL)
     private FoodTruckType truckType;
+    private long timeOpen;
+    private long timeClosed;
     private double latitude;
     private double longitude;
 
@@ -61,6 +63,22 @@ public class FoodTruck {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public long getTimeOpen() {
+        return timeOpen;
+    }
+
+    public void setTimeOpen(long timeOpen) {
+        this.timeOpen = timeOpen;
+    }
+
+    public long getTimeClosed() {
+        return timeClosed;
+    }
+
+    public void setTimeClosed(long timeClosed) {
+        this.timeClosed = timeClosed;
     }
 
     public List<FoodItem> getFoodItems() {
